@@ -86,29 +86,16 @@ class BinOpAst():
         x + 0 = x
         """
         # IMPLEMENTED
-        #if it sees a zero is being added, it removes the '+ 0'
+        #if it sees a zero is being added, should be just the number
         if self.type == NodeType.operator and self.val == '+':
             self.left.additive_identity()
             self.right.additive_identity()
-            
             #zero on left
             if self.left.type == NodeType.number and self.left.val == '0':
                 return self.right
-                """
-                self.val = self.right.val
-                self.type = self.right.type
-                self.left = self.right.left
-                self.right = self.right.right
-                """
             #zero on right
             if self.right.type == NodeType.number and self.right.val == '0':
                 return self.left
-                """
-                self.val = self.left.val
-                self.type = self.left.type
-                self.right = self.left.right
-                self.left = self.left.left
-                """
         return self
                         
     def multiplicative_identity(self):
@@ -116,11 +103,20 @@ class BinOpAst():
         Reduce multiplicative identities
         x * 1 = x
         """
-        # IMPLEMENT ME!
-        pass
+        # IMPLEMENTED
+        # if sees number multiplied by one, should be just number
+        if self.type == NodeType.operator and self.val == '*':
+            self.left.multiplicative_identity()
+            self.right.multiplicative_identity()
+            #zero on left
+            if self.left.type == NodeType.number and self.left.val == '1':
+                return self.right
+            #zero on right
+            if self.right.type == NodeType.number and self.right.val == '1':
+                return self.left
+        return self
     
     
-
      #OPTIONAL IMPLEMENTS
     def mult_by_zero(self):
         """
