@@ -217,12 +217,12 @@ class testRunner(unittest.TestCase):
                 print(f'Opening filepath {outdir}/{file}')
                 expected = accessed_file.read().strip()
 
-        testExp = BinOpAst(indata).additive_identity()
+            testExp = BinOpAst(indata).additive_identity()
 
-        actual = testExp.prefix_str()
+            actual = testExp.prefix_str()
             
-        self.assertEqual(actual, expected, f'Failed on file {file}')
-        print(f"Success on all test cases!\n")
+            self.assertEqual(actual, expected, f'Failed on file {file}')
+            print(f"Success on test {file}!\n")
 
     #test for additive identity
     def test_mult_id(self):
@@ -243,14 +243,14 @@ class testRunner(unittest.TestCase):
                 print(f'Opening filepath {outdir}/{file}')
                 expected = accessed_file.read().strip()
 
-        testExp = BinOpAst(indata).multiplicative_identity()
+            testExp = BinOpAst(indata).multiplicative_identity()
 
-        actual = testExp.prefix_str()
+            actual = testExp.prefix_str()
             
-        self.assertEqual(actual, expected, f'Failed on file {file}')
-        print(f"Success on all test cases!")
+            self.assertEqual(actual, expected, f'Failed on file {file}')
+            print(f"Success on test {file}!\n")
 
-"""
+
     def test_simplify(self):
         print('\n\nTesting simplify_binops function: ')
         indir = osjoin('testbench','combined','inputs') 
@@ -269,14 +269,14 @@ class testRunner(unittest.TestCase):
                 print(f'Opening filepath {outdir}/{file}')
                 expected = accessed_file.read().strip()
 
-        testExp = BinOpAst(indata).simplify_binops()
+            testExp = BinOpAst(indata).simplify_binops()
 
-        actual = testExp.prefix_str()
+            actual = testExp.prefix_str()
             
-        self.assertEqual(actual, expected, f'Failed on file {file}')
-        print(f"Success on all test cases!")
+            self.assertEqual(actual, expected, f'Failed on file {file}')
+            print(f"Success on all test cases!")
 
-"""
+
 
 
 if __name__ == "__main__":
