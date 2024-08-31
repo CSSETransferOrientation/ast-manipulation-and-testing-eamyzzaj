@@ -92,10 +92,19 @@ class BinOpAst():
             self.right.additive_identity()
             #zero on left
             if self.left.type == NodeType.number and self.left.val == '0':
-                return self.right
+                #return self.right
+                
+                self.val = self.right.val
+                self.type = self.right.type
+                self.left = self.right.left
+                self.right = self.right.right
             #zero on right
             if self.right.type == NodeType.number and self.right.val == '0':
-                return self.left
+                #return self.left
+                self.val = self.left.val
+                self.type = self.left.type
+                self.right = self.left.right
+                self.left = self.left.left
         return self
                         
     def multiplicative_identity(self):
@@ -153,6 +162,7 @@ class BinOpAst():
 #unit test class to run the tests
 class testRunner(unittest.TestCase):
     #test for additive identity
+    #print statements added for tracking which tests on what files pass/fail
     def test_add_ident(self):
         print('\nTesting additive identity function: ')
         indir = osjoin('testbench','arith_id','inputs') 
@@ -164,11 +174,11 @@ class testRunner(unittest.TestCase):
             outpath = osjoin(outdir, file)
 
             with open(inpath, 'r') as accessed_file:
-                print(f'Opening filepath {indir}')
+                print(f'Opening filepath {indir}/{file}')
                 indata = list(accessed_file.read().strip().split())
 
             with open(outpath, 'r') as accessed_file:
-                print(f'Opening filepath {outdir}')
+                print(f'Opening filepath {outdir}/{file}')
                 expected = accessed_file.read().strip()
 
         testExp = BinOpAst(indata).additive_identity()
@@ -176,7 +186,7 @@ class testRunner(unittest.TestCase):
         actual = testExp.prefix_str()
             
         self.assertEqual(actual, expected, f'Failed on file {file}')
-        print(f"Success on testcase: {file}\n")
+        print(f"Success on all test cases!\n")
 
     #test for additive identity
     def test_mult_id(self):
@@ -190,11 +200,11 @@ class testRunner(unittest.TestCase):
             outpath = osjoin(outdir, file)
 
             with open(inpath, 'r') as accessed_file:
-                print(f'Opening filepath {indir}')
+                print(f'Opening filepath {indir}/{file}')
                 indata = list(accessed_file.read().strip().split())
 
             with open(outpath, 'r') as accessed_file:
-                print(f'Opening filepath {outdir}')
+                print(f'Opening filepath {outdir}/{file}')
                 expected = accessed_file.read().strip()
 
         testExp = BinOpAst(indata).multiplicative_identity()
@@ -202,10 +212,9 @@ class testRunner(unittest.TestCase):
         actual = testExp.prefix_str()
             
         self.assertEqual(actual, expected, f'Failed on file {file}')
-        print(f"Success on testcase: {file}\n")
+        print(f"Success on all test cases!")
 
-
-                
 
 if __name__ == "__main__":
+    #runs implemented testRunner
     unittest.main()
