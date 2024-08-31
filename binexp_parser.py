@@ -100,7 +100,7 @@ class BinOpAst():
                 self.right = self.right.right
 
             #zero on right
-            if self.right.type == NodeType.number and self.right.val == '0':
+            elif self.right.type == NodeType.number and self.right.val == '0':
                 #return self.left
                 self.val = self.left.val
                 self.type = self.left.type
@@ -108,7 +108,9 @@ class BinOpAst():
                 self.left = self.left.left
         return self
                         
-    def multiplicative_identity(self):
+    #doesn't work with complicated expressions with variety of operators
+    #added a '1' to name so its not called
+    def multiplicative_identity1(self):
         """
         Reduce multiplicative identities
         x * 1 = x
@@ -119,22 +121,44 @@ class BinOpAst():
             self.left.multiplicative_identity()
             self.right.multiplicative_identity()
 
-            #zero on left
+            #one on left
             if self.left.type == NodeType.number and self.left.val == '1':
                 #return self.right
                 self.val = self.right.val
                 self.type = self.right.type
                 self.left = self.right.left
                 self.right = self.right.right
-            #zero on right
-            if self.right.type == NodeType.number and self.right.val == '1':
+            #one on right
+            elif self.right.type == NodeType.number and self.right.val == '1':
                 #return self.left
                 self.val = self.left.val
                 self.type = self.left.type
-                self.right = self.left.right
                 self.left = self.left.left
+                self.right = self.left.right
         return self
     
+    def multiplicative_identity(self):
+        """
+        Reduce multiplicative identities:
+        x * 1 = x
+        1 * x = x
+        """
+        if self.type == NodeType.operator:
+            #simplifying recursively on tree
+            if self.left:
+                self.left = self.left.multiplicative_identity()
+            if self.right:
+                self.right = self.right.multiplicative_identity()
+
+        if self.val == '*':
+            # one on left
+            if self.left.type == NodeType.number and self.left.val == '1':
+                return self.left
+            # one on right
+            elif self.right.type == NodeType.number and self.right.val == '1':
+                return self.left
+        return self
+
     
      #OPTIONAL IMPLEMENTS
     def mult_by_zero(self):
@@ -168,6 +192,8 @@ class BinOpAst():
         self.multiplicative_identity()
         #self.mult_by_zero()
         #self.constant_fold()
+
+        return self
 
 #unit test class to run the tests
 class testRunner(unittest.TestCase):
@@ -223,6 +249,34 @@ class testRunner(unittest.TestCase):
             
         self.assertEqual(actual, expected, f'Failed on file {file}')
         print(f"Success on all test cases!")
+
+"""
+    def test_simplify(self):
+        print('\n\nTesting simplify_binops function: ')
+        indir = osjoin('testbench','combined','inputs') 
+        outdir = osjoin('testbench','combined','outputs')
+
+        for file in os.listdir(indir):
+
+            inpath = osjoin(indir, file)
+            outpath = osjoin(outdir, file)
+
+            with open(inpath, 'r') as accessed_file:
+                print(f'Opening filepath {indir}/{file}')
+                indata = list(accessed_file.read().strip().split())
+
+            with open(outpath, 'r') as accessed_file:
+                print(f'Opening filepath {outdir}/{file}')
+                expected = accessed_file.read().strip()
+
+        testExp = BinOpAst(indata).simplify_binops()
+
+        actual = testExp.prefix_str()
+            
+        self.assertEqual(actual, expected, f'Failed on file {file}')
+        print(f"Success on all test cases!")
+
+"""
 
 
 if __name__ == "__main__":
