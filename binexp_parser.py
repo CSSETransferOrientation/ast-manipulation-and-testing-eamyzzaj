@@ -90,17 +90,20 @@ class BinOpAst():
         if self.type == NodeType.operator and self.val == '+':
             self.left.additive_identity()
             self.right.additive_identity()
+
             #zero on left
             if self.left.type == NodeType.number and self.left.val == '0':
                 #return self.right
-                
                 self.val = self.right.val
                 self.type = self.right.type
                 self.left = self.right.left
                 self.right = self.right.right
+
             #zero on right
             if self.right.type == NodeType.number and self.right.val == '0':
                 #return self.left
+                self.val = self.left.val
+                self.type = self.left.type
                 self.right = self.left.right
                 self.left = self.left.left
         return self
@@ -118,10 +121,18 @@ class BinOpAst():
 
             #zero on left
             if self.left.type == NodeType.number and self.left.val == '1':
-                return self.right
+                #return self.right
+                self.val = self.right.val
+                self.type = self.right.type
+                self.left = self.right.left
+                self.right = self.right.right
             #zero on right
             if self.right.type == NodeType.number and self.right.val == '1':
-                return self.left
+                #return self.left
+                self.val = self.left.val
+                self.type = self.left.type
+                self.right = self.left.right
+                self.left = self.left.left
         return self
     
     
