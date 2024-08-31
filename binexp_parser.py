@@ -78,13 +78,38 @@ class BinOpAst():
             case NodeType.operator:
                 return self.left.postfix_str() + ' ' + self.right.postfix_str() + ' ' + self.val
 
+
+    # REQUIRED IMPLEMENTS
     def additive_identity(self):
         """
         Reduce additive identities
         x + 0 = x
         """
-        # IMPLEMENT ME!
-        pass
+        # IMPLEMENTED
+        #if it sees a zero is being added, it removes the '+ 0'
+        if self.type == NodeType.operator and self.val == '+':
+            self.left.additive_identity()
+            self.right.additive_identity()
+            
+            #zero on left
+            if self.left.type == NodeType.number and self.left.val == '0':
+                return self.right
+                """
+                self.val = self.right.val
+                self.type = self.right.type
+                self.left = self.right.left
+                self.right = self.right.right
+                """
+            #zero on right
+            if self.right.type == NodeType.number and self.right.val == '0':
+                return self.left
+                """
+                self.val = self.left.val
+                self.type = self.left.type
+                self.right = self.left.right
+                self.left = self.left.left
+                """
+        return self
                         
     def multiplicative_identity(self):
         """
@@ -95,6 +120,8 @@ class BinOpAst():
         pass
     
     
+
+     #OPTIONAL IMPLEMENTS
     def mult_by_zero(self):
         """
         Reduce multiplication by zero
@@ -124,28 +151,29 @@ class BinOpAst():
         """
         self.additive_identity()
         self.multiplicative_identity()
-        self.mult_by_zero()
-        self.constant_fold()
+        #self.mult_by_zero()
+        #self.constant_fold()
 
-#added test_runner function to run all implemented test cases
-def test_runner(infile, outfile, testfunction):
-    with open(infile, 'r') as infile:
-        #reads file, removes whitespace
-        indata = infile.read().strip()
+#unit test class to run the tests
+class testRunner(unittest.TestCase):
+    def test_add_ident(self):
+        indir = osjoin('testbench','arith_id','inputs') 
+        outdir = osjoin('testbench','arith_id','outputs')
+        for file in os.listdir(indir):
+            print(f'Opening filepath {indir}')
+            inpath = osjoin(indir, file)
+            outpath = osjoin(outdir, file)
+            with open(inpath, 'r') as accessed_file:
+                indata = list(accessed_file.read().strip().split())
+            with open(outpath, 'r') as accessed_file:
+                expected = accessed_file.read().strip()
 
-        result = testfunction(indata)
+        testExp = BinOpAst(indata).additive_identity()
 
-    with open(outfile, 'r') as outfile:
-        #creates the expected outfile to compare against test outputs
-        expected = outfile.read().strip()
-
-    if result == expected:
-        print(f"Passed Test: {os.path.basename(infile)}")
-    elif result != expected:
-        print(f"FAILED Test: {os.path.basename(infile)}")
-        print(f"Result should be: {expected}\nReceived result: {result}")
-
-    return 0
+        actual = testExp.prefix_str()
+            
+        self.assertEqual(actual, expected, f'Failed on file {file}')
+                
 
 if __name__ == "__main__":
     unittest.main()
