@@ -152,16 +152,23 @@ class BinOpAst():
 
 #unit test class to run the tests
 class testRunner(unittest.TestCase):
+    #test for additive identity
     def test_add_ident(self):
+        print('\nTesting additive identity function: ')
         indir = osjoin('testbench','arith_id','inputs') 
         outdir = osjoin('testbench','arith_id','outputs')
+
         for file in os.listdir(indir):
-            print(f'Opening filepath {indir}')
+
             inpath = osjoin(indir, file)
             outpath = osjoin(outdir, file)
+
             with open(inpath, 'r') as accessed_file:
+                print(f'Opening filepath {indir}')
                 indata = list(accessed_file.read().strip().split())
+
             with open(outpath, 'r') as accessed_file:
+                print(f'Opening filepath {outdir}')
                 expected = accessed_file.read().strip()
 
         testExp = BinOpAst(indata).additive_identity()
@@ -169,6 +176,35 @@ class testRunner(unittest.TestCase):
         actual = testExp.prefix_str()
             
         self.assertEqual(actual, expected, f'Failed on file {file}')
+        print(f"Success on testcase: {file}\n")
+
+    #test for additive identity
+    def test_mult_id(self):
+        print('\n\nTesting multiplicative identity function: ')
+        indir = osjoin('testbench','mult_id','inputs') 
+        outdir = osjoin('testbench','mult_id','outputs')
+
+        for file in os.listdir(indir):
+
+            inpath = osjoin(indir, file)
+            outpath = osjoin(outdir, file)
+
+            with open(inpath, 'r') as accessed_file:
+                print(f'Opening filepath {indir}')
+                indata = list(accessed_file.read().strip().split())
+
+            with open(outpath, 'r') as accessed_file:
+                print(f'Opening filepath {outdir}')
+                expected = accessed_file.read().strip()
+
+        testExp = BinOpAst(indata).multiplicative_identity()
+
+        actual = testExp.prefix_str()
+            
+        self.assertEqual(actual, expected, f'Failed on file {file}')
+        print(f"Success on testcase: {file}\n")
+
+
                 
 
 if __name__ == "__main__":
