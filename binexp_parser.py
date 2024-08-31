@@ -127,6 +127,25 @@ class BinOpAst():
         self.mult_by_zero()
         self.constant_fold()
 
+#added test_runner function to run all implemented test cases
+def test_runner(infile, outfile, testfunction):
+    with open(infile, 'r') as infile:
+        #reads file, removes whitespace
+        indata = infile.read().strip()
+
+        result = testfunction(indata)
+
+    with open(outfile, 'r') as outfile:
+        #creates the expected outfile to compare against test outputs
+        expected = outfile.read().strip()
+
+    if result == expected:
+        print(f"Passed Test: {os.path.basename(infile)}")
+    elif result != expected:
+        print(f"FAILED Test: {os.path.basename(infile)}")
+        print(f"Result should be: {expected}\nReceived result: {result}")
+
+    return 0
 
 if __name__ == "__main__":
     unittest.main()
