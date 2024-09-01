@@ -209,10 +209,23 @@ class BinOpAst():
         3) Extra #1: Multiplication by 0, e.g. x * 0 = 0
         4) Extra #2: Constant folding, e.g. statically we can reduce 1 + 1 to 2, but not x + 1 to anything
         """
-        self.additive_identity()
-        self.multiplicative_identity()
-        #self.mult_by_zero()
-        #self.constant_fold()
+        prev = None
+        curr = self.prefix_str
+
+        # loops until can't be simplified further
+        while prev != curr:
+            # storing how tree was
+            prev = curr
+
+            # simplifying, order matters for some expressions
+            # not with in scope of class
+            self.additive_identity()
+            self.multiplicative_identity()
+            #self.mult_by_zero()
+            #self.constant_fold()
+
+            # getting tree rep.
+            curr = self.prefix_str
 
         return self
 
@@ -271,7 +284,7 @@ class testRunner(unittest.TestCase):
             self.assertEqual(actual, expected, f'Failed on file {file}')
             print(f"Success on test {file}!\n")
 
-"""
+
     def test_simplify(self):
         print('\n\nTesting simplify_binops function: ')
         indir = osjoin('testbench','combined','inputs') 
@@ -296,7 +309,7 @@ class testRunner(unittest.TestCase):
             
             self.assertEqual(actual, expected, f'Failed on file {file}')
             print(f"Success on all test cases!")
-"""
+
 
 
 
