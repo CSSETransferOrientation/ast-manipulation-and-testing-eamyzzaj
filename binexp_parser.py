@@ -107,9 +107,6 @@ class BinOpAst():
                 self.right = self.left.right
                 self.left = self.left.left
         return self
-                        
-    #doesn't work with complicated expressions with variety of operators
-    #trying to implement and modify two different versions
 
     def multiplicative_identity(self):
         """
@@ -154,33 +151,9 @@ class BinOpAst():
                     else:
                         False
 
-
+        #return after modification
         return self
 
-    
-    def NOTmultiplicative_identity(self):
-        """
-        Reduce multiplicative identities:
-        x * 1 = x
-        1 * x = x
-        """
-        if self.type == NodeType.operator:
-            #simplifying recursively on tree
-            if self.left:
-                self.left = self.left.multiplicative_identity()
-            if self.right:
-                self.right = self.right.multiplicative_identity()
-
-        if self.val == '*':
-            # one on left
-            if self.left.type == NodeType.number and self.left.val == '1':
-                return self.left
-            # one on right
-            elif self.right.type == NodeType.number and self.right.val == '1':
-                return self.left
-        return self
-
-    
      #OPTIONAL IMPLEMENTS
     def mult_by_zero(self):
         """
