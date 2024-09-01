@@ -109,38 +109,56 @@ class BinOpAst():
         return self
                         
     #doesn't work with complicated expressions with variety of operators
-    #added a '1' to name so its not called
-    def multiplicative_identity1(self):
+    #trying to implement and modify two different versions
+
+    def multiplicative_identity(self):
         """
         Reduce multiplicative identities
         x * 1 = x
         """
-        # Recursively simplify left and right subtrees, if they exist
-        if self.left:
-                self.left.multiplicative_identity()
-        if self.right:
-                self.right.multiplicative_identity()
-        
-        if self.type == NodeType.operator and self.val == '*':
-        
-            # one on left
-            if self.left and self.left.type == NodeType.number and self.left.val == '1':
-                self.val = self.right.val
-                self.type = self.right.type
-                self.left = self.right.left
-                self.right = self.right.right
+        if self.type == NodeType.operator:
 
-            # one on right
-            elif self.right and self.right.type == NodeType.number and self.right.val == '1':
-                self.val = self.left.val
-                self.type = self.left.type
-                self.left = self.left.left
-                self.right = self.left.right
+            # Recursively simplify left and right subtrees, if they exist
+            if self.left:
+                    self.left.multiplicative_identity()
+            if self.right:
+                    self.right.multiplicative_identity()
+        
+            if self.val == '*':
+        
+                # one on left
+                if self.left and self.left.type == NodeType.number and self.left.val == '1':
+                    self.val = self.right.val
+                    self.type = self.right.type
+                    #checks existence
+                    if self.right:
+                        self.left = self.right.left
+                    else:
+                        False
+                    if self.right:
+                        self.right = self.right.right
+                    else:
+                        False
+
+                # one on right
+                elif self.right and self.right.type == NodeType.number and self.right.val == '1':
+                    self.val = self.left.val
+                    self.type = self.left.type
+                    #checks existence
+                    if self.left:
+                        self.left = self.left.left    
+                    else:
+                        False
+                    if self.left:
+                             self.right = self.left.right
+                    else:
+                        False
+
 
         return self
 
     
-    def multiplicative_identity(self):
+    def NOTmultiplicative_identity(self):
         """
         Reduce multiplicative identities:
         x * 1 = x
