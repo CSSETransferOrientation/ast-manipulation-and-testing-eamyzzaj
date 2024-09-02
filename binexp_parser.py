@@ -87,6 +87,7 @@ class BinOpAst():
         """
         # IMPLEMENTED
         #if it sees a zero is being added, should be just the number
+        # ;;> You always want to do the recursive call to handle things like '* 10 + 1 0', see the propogate test I added
         if self.type == NodeType.operator and self.val == '+':
             self.left.additive_identity()
             self.right.additive_identity()
@@ -116,6 +117,7 @@ class BinOpAst():
         if self.type == NodeType.operator:
 
             # Recursively simplify left and right subtrees, if they exist
+            # ;;> This is the right way!
             if self.left:
                     self.left.multiplicative_identity()
             if self.right:
